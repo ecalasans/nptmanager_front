@@ -1,5 +1,4 @@
 import { Stack, Container, Row, Col } from 'react-bootstrap';
-import '../static/css/styles.css'
 
 const Home = () => {
     return (

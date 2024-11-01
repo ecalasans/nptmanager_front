@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home'
 import ProtectedRoute from './routes/ProtectedRoute';
+import Login from './pages/Login';
 
 
 function App() {
@@ -16,7 +17,7 @@ function App() {
 
             <Route path="/login/"
                    element={
-                       <div>Login</div>
+                       <Login />
                    }
            />
         </Routes>

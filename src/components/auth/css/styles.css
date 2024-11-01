@@ -1,0 +1,43 @@
+#form-container {
+    margin: 50px auto;
+    padding: 20px;
+}
+
+#form-container h2 {
+    font-weight: 900;
+    margin-bottom: 15px;
+}
+
+#login-form .form-control {
+    border: none;
+    border-bottom: 2px solid lightgray;
+    border-radius: 0;
+}
+
+#login-form .form-control:focus {
+    box-shadow: none;
+}
+
+#login-form .link-cadastro {
+    text-align: center;
+}
+
+#form-container .img-login {
+    margin-top: 15px;
+}
+
+.btn.btn-primary {
+    width: 100%;
+}
+
+#form-container .copyright {
+    text-align: center;
+    font-size: 0.8rem;
+    margin-top: 50px;
+}
+
+@media(min-width : 768px) {
+    .btn.btn-primary {
+        width: auto;
+    }
+}
