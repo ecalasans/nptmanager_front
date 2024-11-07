@@ -8,17 +8,17 @@
     margin-bottom: 15px;
 }
 
-#login-form .form-control {
+#login-form .form-control, #register-form .form-control {
     border: none;
     border-bottom: 2px solid lightgray;
     border-radius: 0;
 }
 
-#login-form .form-control:focus {
+#login-form .form-control:focus, #register-form .form-control:focus {
     box-shadow: none;
 }
 
-#login-form .link-cadastro {
+#login-form .link-cadastro, #register-form .link-cadastro {
     text-align: center;
 }
 
@@ -40,4 +40,10 @@
     .btn.btn-primary {
         width: auto;
     }
+}
+
+.register-container, .login-container {
+    background: #efefef;
+    padding: 20px;
+    border-radius: 15px;
 }

@@ -1,8 +1,8 @@
-import { Link } from 'react-router-dom';
-import LoginForm from '../components/auth/LoginForm';
+import { Link } from "react-router-dom";
+import RegistrationForm from "../components/auth/RegistrationForm";
 import {Col, Container, Row} from "react-bootstrap";
 
-const Login = () => {
+const Registration = () => {
     return (
         <Container className="col-md-9 col-11 form-container" id="form-container">
             <Row className="align-items-center justify-content-center">
@@ -20,11 +20,13 @@ const Login = () => {
                     {/*           fluid className="img-login"></Image>*/}
                     {/*</Col>*/}
                 </Col>
-                <Col md={6} className="order-sm-2 text-center mt-2 login-container">
-                    <h2>Faça seu login</h2>
-                    <LoginForm />
-                    <div className="d-inline text-center">
-                        <p>Ainda não tenho {" "} <Link to="/register/">cadastro</Link> </p>
+                <Col md={6} className="order-sm-2 mt-2 register-container">
+                    <h2>Faça seu cadastro</h2>
+                    <RegistrationForm />
+                    <div className="text-center">
+                        <p className="content">Faça seu {" "}
+                            <Link to="/login/">login</Link>
+                        </p>
                     </div>
 
                 </Col>
@@ -38,4 +40,4 @@ const Login = () => {
     )
 }
 
-export default Login;
+export default Registration;
