@@ -49,21 +49,49 @@ const RegistrationForm = () => {
     }
 
     // Validação de formulário
-    const validaForm = (first_name, last_name, username, email, crm, hospitals) => {
+    const validaForm = (first_name, last_name, username, email, crm, password, hospitals) => {
         // Valida nome
         if (first_name === ""){
-            setFirstNameError("Este campo é obrigatório");
+            setFirstNameError("Este campo é obrigatório!");
         } else {
             setFirstNameValid(true);
         }
 
         // Valida sobrenome
+        if (last_name === ""){
+            setLastNameError("Este campo é obrigatório!");
+        } else {
+            setLastNameValid(true);
+        }
 
         // Valida email
+        const email_regex = /\w+@\D+[.]\D{3}/gm;
+        if (!email_regex.test(email)) {
+            setEmailError("Formato de email inválido!");
+        } else if (email === "") {
+            setEmailError("Este campo é obrigatório!");
+        } else {
+            setEmailValid(true);
+        }
 
         // Valida senha
+        if (password === ""){
+            setPasswordError("Este campo é obrigatório!");
+        } else if (password.length < 8) {
+            setPasswordError("A senha precisa ter pelo menos 8 caracteres!");
+        } else {
+            setPasswordValid(true);
+        }
 
         // Valida CRM
+        const crm_regex = /\D/gm;
+        if (crm_regex.test(crm)) {
+            setCrmError("Só números no CRM!")
+        } else if (crm === "") {
+            setCrmError("Este campo é obrigatório!")
+        } else {
+            setCrmValid(true);
+        }
 
         // Valida hospitais
 
