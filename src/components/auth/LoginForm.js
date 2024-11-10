@@ -24,6 +24,8 @@ const LoginForm = () => {
     const validaForm = (email, senha) => {
         // Trata a validação do email
         const regex = /\w+@\D+[.]\D{3}/gm;
+        console.log(`Teste de email: ${regex.test(email)}`);
+
         if (email === ""){
             setEmailError("Este campo é obrigatório!")
         } else if (!regex.test(email)) {
@@ -41,6 +43,9 @@ const LoginForm = () => {
 
         setEmailValid(is_email_valid);
         setPasswordValid(is_password_valid);
+        setValidated(email_valid && password_valid);
+
+        return (email_valid && password_valid);
     }
 
 
@@ -50,13 +55,17 @@ const LoginForm = () => {
         const login_form = e.currentTarget;
         console.log(login_form.email.value, login_form.password.value);
 
-        validaForm(login_form.email.value, login_form.password.value);
+        let valid_form = validaForm(login_form.email.value, login_form.password.value);
+
+        console.log(`Valid form:  ${valid_form}`);
 
         // Se o formulário não for válido não progride a partir daqui
-        if (!email_valid || !password_valid) {
+        if (!valid_form) {
             console.log("Formulário inválido!");
             e.stopPropagation();
         } else {
+            console.log(`Validated:  ${validated}`);
+
             // Prepara os dados para a requisição
             const data = {
                 email: form.email,
@@ -91,8 +100,6 @@ const LoginForm = () => {
             );
         }
 
-        // Valida o formulário
-        setValidated(true);
     }
 
     return (
