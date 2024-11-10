@@ -93,8 +93,10 @@ const LoginForm = () => {
                 }
             ).catch(
                 (error) => {
-                    if (error.message) {
-                        setError(error.request.response);
+                    if (error.response) {
+                        console.log(error.response.data.message);
+                        setError(error.response.data.message);
+                        // Imprime mensagem de erro e para a propagação
                     }
                 }
             );
@@ -104,6 +106,9 @@ const LoginForm = () => {
 
     return (
         <Form noValidate id="login-form" onSubmit={handleSubmit} validation={validated} className="align-items-center">
+            <Form.Group className="mb-3">
+                <p className="text-danger">{error}</p>
+            </Form.Group>
             <Form.Group className="mb-3">
                 <FloatingLabel controlId="logEmail" label="Digite seu email">
                     <Form.Control value={form.email}

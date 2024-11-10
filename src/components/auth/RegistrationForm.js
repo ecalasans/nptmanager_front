@@ -22,8 +22,52 @@ const RegistrationForm = () => {
         }
     );
 
+    // Estados para validação
+    const [first_name_valid, setFirstNameValid] = useState(false);
+    const [first_name_error, setFirstNameError] = useState("");
+
+    const [last_name_valid, setLastNameValid] = useState(false);
+    const [last_name_error, setLastNameError] = useState("");
+
+    const [email_valid, setEmailValid] = useState(false);
+    const [email_error, setEmailError] = useState("");
+
+    const [password_valid, setPasswordValid] = useState(false);
+    const [password_error, setPasswordError] = useState("");
+
+    const [crm_valid, setCrmValid] = useState(false);
+    const [crm_error, setCrmError] = useState("");
+
+    const [username_valid, setUsernameValid] = useState(false);
+    const [username_error, setUsernameError] = useState("");
+
+    const [hospitais_valid, setHospitaisValid] = useState(false);
+    const [hospitais_error, setHospitaisError] = useState("");
+
     const handleHospitais = (h) => {
        setHospitais(h);
+    }
+
+    // Validação de formulário
+    const validaForm = (first_name, last_name, username, email, crm, hospitals) => {
+        // Valida nome
+        if (first_name === ""){
+            setFirstNameError("Este campo é obrigatório");
+        } else {
+            setFirstNameValid(true);
+        }
+
+        // Valida sobrenome
+
+        // Valida email
+
+        // Valida senha
+
+        // Valida CRM
+
+        // Valida hospitais
+
+        return (first_name_valid);
     }
 
 
@@ -37,6 +81,7 @@ const RegistrationForm = () => {
         )
 
         const reg_form = e.currentTarget;
+        console.log([...reg_form.value]);
 
         if (reg_form.checkValidity() === false) {
             e.stopPropagation();
@@ -177,7 +222,9 @@ const RegistrationForm = () => {
                 <Form.Label >Hospitais que trabalha</Form.Label>
                 <HospitaisSelect handleHospitals={handleHospitais} />
             </Form.Group>
-            <Button variant="primary" type="submit" className="mb-3" onClick={handleSubmit}>Entrar</Button>
+            <Form.Group className="mb-3 text-center">
+                <Button variant="primary" type="submit" onClick={handleSubmit}>Cadastrar</Button>
+            </Form.Group>
         </Form>
   )
 }

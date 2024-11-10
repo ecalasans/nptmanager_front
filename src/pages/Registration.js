@@ -25,7 +25,7 @@ const Registration = () => {
                     <RegistrationForm />
                     <div className="text-center">
                         <p className="content">Faça seu {" "}
-                            <Link to="/login/">login</Link>
+                            <Link to="/login/">login</Link>.
                         </p>
                     </div>
 
