@@ -23,48 +23,76 @@ const RegistrationForm = () => {
     );
 
     // Estados para validação
-    const [first_name_valid, setFirstNameValid] = useState(false);
+    const [first_name_valid, setFirstNameValid] = useState(true);
     const [first_name_error, setFirstNameError] = useState("");
 
-    const [last_name_valid, setLastNameValid] = useState(false);
+    const [last_name_valid, setLastNameValid] = useState(true);
     const [last_name_error, setLastNameError] = useState("");
 
-    const [email_valid, setEmailValid] = useState(false);
+    const [email_valid, setEmailValid] = useState(true);
     const [email_error, setEmailError] = useState("");
 
-    const [password_valid, setPasswordValid] = useState(false);
+    const [password_valid, setPasswordValid] = useState(true);
     const [password_error, setPasswordError] = useState("");
 
-    const [crm_valid, setCrmValid] = useState(false);
+    const [crm_valid, setCrmValid] = useState(true);
     const [crm_error, setCrmError] = useState("");
 
-    const [username_valid, setUsernameValid] = useState(false);
+    const [username_valid, setUsernameValid] = useState(true);
     const [username_error, setUsernameError] = useState("");
 
-    const [hospitais_valid, setHospitaisValid] = useState(false);
+    const [hospitais_valid, setHospitaisValid] = useState(true);
     const [hospitais_error, setHospitaisError] = useState("");
 
     const handleHospitais = (h) => {
        setHospitais(h);
     }
 
+    useEffect(
+        () => {
+            setForm(
+                prevForm => (
+                    {...prevForm, hospitais: hospitais}
+                )
+            )
+            console.log(form);
+        },
+        [hospitais]
+    )
+
     // Validação de formulário
-    const validaForm = (first_name, last_name, username, email, crm, password, hospitals) => {
-        // Valida nome
+    const validaForm = (formulario) => {
+        const first_name = formulario.first_name;
+        const last_name = formulario.last_name;
+        const crm = formulario.crm;
+        const hospitals = formulario.hospitais;
+        const username = formulario.username;
+        const email = formulario.email;
+        const password = formulario.password;
+
+        console.log(first_name, last_name, crm, hospitals, username, email, password);
+
+        // Valida
+        let is_first_name_valid = false;
         if (first_name === ""){
             setFirstNameError("Este campo é obrigatório!");
+            setFirstNameValid(!first_name_valid);
         } else {
-            setFirstNameValid(true);
+            is_first_name_valid = true;
         }
 
         // Valida sobrenome
+        let is_last_name_valid = false;
         if (last_name === ""){
             setLastNameError("Este campo é obrigatório!");
         } else {
             setLastNameValid(true);
+            is_last_name_valid = true;
         }
 
+
         // Valida email
+        let is_email_valid = false;
         const email_regex = /\w+@\D+[.]\D{3}/gm;
         if (!email_regex.test(email)) {
             setEmailError("Formato de email inválido!");
@@ -72,46 +100,74 @@ const RegistrationForm = () => {
             setEmailError("Este campo é obrigatório!");
         } else {
             setEmailValid(true);
+            is_email_valid = true;
         }
 
-        // Valida senha
+        // Valida
+        let is_password_valid = false;
         if (password === ""){
             setPasswordError("Este campo é obrigatório!");
         } else if (password.length < 8) {
             setPasswordError("A senha precisa ter pelo menos 8 caracteres!");
         } else {
             setPasswordValid(true);
+            is_password_valid = true;
         }
 
         // Valida CRM
+        let is_crm_valid = false;
         const crm_regex = /\D/gm;
         if (crm_regex.test(crm)) {
-            setCrmError("Só números no CRM!")
+            setCrmError("Só números no CRM!");
         } else if (crm === "") {
-            setCrmError("Este campo é obrigatório!")
+            setCrmError("Este campo é obrigatório!");
         } else {
             setCrmValid(true);
+            is_crm_valid = true;
         }
 
-        // Valida hospitais
+        // Valida username
+        let is_username_valid = false;
+        if (username === "") {
+            setUsernameError("Este campo é obrigatório!");
+        } else {
+            setUsernameValid(true);
+            is_username_valid = true;
+        }
 
-        return (first_name_valid);
+        // Valida
+        let is_hospitals_valid = false;
+        if (hospitals.length === 0) {
+            setHospitaisError("Selecione um ou mais hospitais!");
+        } else {
+            setHospitaisValid(true);
+            is_hospitals_valid = true;
+        }
+
+        if (is_first_name_valid && is_last_name_valid && is_email_valid && is_password_valid
+            && is_crm_valid && is_username_valid && is_hospitals_valid
+        ) {
+            setValidated(true);
+        }
+
+        return (is_first_name_valid && is_last_name_valid && is_email_valid && is_password_valid
+            && is_crm_valid && is_username_valid && is_hospitals_valid
+        );
     }
 
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        setForm(
-            prevForm => (
-                {...prevForm, hospitais: hospitais}
-            )
-        )
 
         const reg_form = e.currentTarget;
-        console.log([...reg_form.value]);
+        console.log(`Reg_form: ${reg_form.value}`);
 
-        if (reg_form.checkValidity() === false) {
+        const valid_form = validaForm(form);
+
+
+        if (!valid_form) {
+            console.log("Formulário inválido!")
             e.stopPropagation();
         } else {
             const data = {
@@ -151,7 +207,6 @@ const RegistrationForm = () => {
 
             )
         }
-        console.log(form);
     }
 
     return (
@@ -165,9 +220,11 @@ const RegistrationForm = () => {
                                   placeholder="Digite seu nome"
                                   type="input"
                                   required
+                                  isInvalid={!first_name_valid}
+                                  onFocus={(e) => setFirstNameValid(!first_name_valid)}
                     />
-                    <Form.Control.Feedback type="invalid">
-                        Este campo é obrigatório!
+                    <Form.Control.Feedback type="invalid" name="feedbackFirstName">
+                        {first_name_error}
                     </Form.Control.Feedback>
                 </FloatingLabel>
             </Form.Group>
@@ -180,9 +237,10 @@ const RegistrationForm = () => {
                                  placeholder="Digite seu sobrenome"
                                  type="input"
                                  required
+                                 isInvalid={!last_name_valid}
                    />
-                   <Form.Control.Feedback type="invalid">
-                       Este campo é obrigatório!
+                   <Form.Control.Feedback type="invalid" name="feedbackLastName">
+                       {last_name_error}
                    </Form.Control.Feedback>
                </FloatingLabel>
             </Form.Group>
@@ -195,9 +253,10 @@ const RegistrationForm = () => {
                                   placeholder="Digite email"
                                   type="email"
                                   required
+                                  isInvalid={!email_valid}
                     />
-                    <Form.Control.Feedback type="invalid">
-                        Este campo é obrigatório!
+                    <Form.Control.Feedback type="invalid" name="feedbackEmail">
+                        {email_error}
                     </Form.Control.Feedback>
                 </FloatingLabel>
             </Form.Group>
@@ -210,9 +269,10 @@ const RegistrationForm = () => {
                                   placeholder="Usuário"
                                   type="input"
                                   required
+                                  isInvalid={!username_valid}
                     />
-                    <Form.Control.Feedback type="invalid">
-                        Este campo é obrigatório!
+                    <Form.Control.Feedback type="invalid" name="feedbackUsername">
+                        {username_error}
                     </Form.Control.Feedback>
                 </FloatingLabel>
             </Form.Group>
@@ -225,9 +285,10 @@ const RegistrationForm = () => {
                                   placeholder="Senha"
                                   type="password"
                                   required
+                                  isInvalid={!password_valid}
                     />
-                    <Form.Control.Feedback type="invalid">
-                        Este campo é obrigatório!
+                    <Form.Control.Feedback type="invalid" name="feedbackPassword">
+                        {password_error}
                     </Form.Control.Feedback>
                 </FloatingLabel>
             </Form.Group>
@@ -240,15 +301,19 @@ const RegistrationForm = () => {
                                   placeholder="Digite seu CRM"
                                   type="input"
                                   required
+                                  isInvalid={!crm_valid}
                     />
-                    <Form.Control.Feedback type="invalid">
-                        Este campo é obrigatório!
+                    <Form.Control.Feedback type="invalid" name="feedbackCRM">
+                        {crm_error}
                     </Form.Control.Feedback>
                 </FloatingLabel>
             </Form.Group>
             <Form.Group className="mb-3">
-                <Form.Label >Hospitais que trabalha</Form.Label>
+                <Form.Label>Hospitais que trabalha</Form.Label>
                 <HospitaisSelect handleHospitals={handleHospitais} />
+                <Form.Control.Feedback type="invalid" name="feedbackHospitals">
+                    {hospitais_error}
+                </Form.Control.Feedback>
             </Form.Group>
             <Form.Group className="mb-3 text-center">
                 <Button variant="primary" type="submit" onClick={handleSubmit}>Cadastrar</Button>

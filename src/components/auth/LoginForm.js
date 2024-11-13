@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import {Form, Button, FloatingLabel} from "react-bootstrap";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -43,10 +42,17 @@ const LoginForm = () => {
 
         setEmailValid(is_email_valid);
         setPasswordValid(is_password_valid);
-        setValidated(email_valid && password_valid);
+        setValidated(is_email_valid && is_password_valid);
 
-        return (email_valid && password_valid);
+        return (is_email_valid && is_password_valid);
     }
+
+    useEffect(
+        () => {
+            console.log(`Validated: ${validated}`);
+        },
+        [validated]
+    )
 
 
     const handleSubmit =  (e) => {
@@ -55,8 +61,7 @@ const LoginForm = () => {
         const login_form = e.currentTarget;
         console.log(login_form.email.value, login_form.password.value);
 
-        let valid_form = validaForm(login_form.email.value, login_form.password.value);
-
+        let valid_form = validaForm(login_form.email.value, login_form.password.value)
         console.log(`Valid form:  ${valid_form}`);
 
         // Se o formulário não for válido não progride a partir daqui
@@ -118,7 +123,7 @@ const LoginForm = () => {
                                   placeholder="Digite seu email"
                                   type="email"
                                   required
-                                  isInvalid={!email_valid && validated}
+                                  isInvalid={!email_valid}
                     />
                     <Form.Control.Feedback type="invalid" name="feedbackEmail">
                         {email_error}
@@ -134,7 +139,7 @@ const LoginForm = () => {
                                   placeholder="Digite sua senha"
                                   type="password"
                                   required
-                                  isInvalid={!password_valid && validated}
+                                  isInvalid={!password_valid}
                     />
                     <Form.Control.Feedback type="invalid" name="feedbackPassword">
                         {password_error}
