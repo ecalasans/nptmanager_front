@@ -22,21 +22,26 @@ const HospitaisSelect = ({handleHospitals}) => {
         }, []
     );
 
+    useEffect(() => {
+            handleHospitals(selected);
+        },
+        [selected, handleHospitals]
+    )
+
     const selectHospitais = (e) => {
         // Verifica se está checado, e se já está no array
         // Se não estiver checado, checa  adiciona
-        if (e.target.checked) {
-            setSelected([...selected, e.target.value])
-
-        } else {
-            setSelected(selected.filter(h => h !== e.target.value));
-
-        }
+        const op = e.target.value;
+        setSelected(
+            prevSelected => e.target.checked ? [...prevSelected, op]
+                                                    : prevSelected.filter(h => h !== op)
+        )
     }
-    handleHospitals(selected);
+
 
     return (
         <>
+            {error && <p className="text-danger mb-2">Selecione pelo menos 1 hospital!</p>}
             {
                 hospitais.map(
                     (hospital) => (
@@ -44,7 +49,7 @@ const HospitaisSelect = ({handleHospitals}) => {
                                     id={hospital.public_id}
                                     label={hospital.nome}
                                     value={hospital.sigla}
-                                    onClick={selectHospitais}
+                                    onChange={selectHospitais}
                                     key={hospital.public_id}
                         />
                     )

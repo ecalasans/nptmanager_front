@@ -9,7 +9,9 @@ import HospitaisSelect from "../form/HospitaisSelect";
 const RegistrationForm = () => {
     const navigate = useNavigate();
     const [validated, setValidated] = useState(false);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(null)
+    const [success, setSuccess] = useState(true);
+    const [message, setMessage] = useState("");
     const [hospitais, setHospitais] = useState([]);
     const [form, setForm] = useState({
             email: "",
@@ -60,99 +62,97 @@ const RegistrationForm = () => {
         [hospitais]
     )
 
-    // Validação de formulário
-    const validaForm = (formulario) => {
-        const first_name = formulario.first_name;
-        const last_name = formulario.last_name;
-        const crm = formulario.crm;
-        const hospitals = formulario.hospitais;
-        const username = formulario.username;
-        const email = formulario.email;
-        const password = formulario.password;
+    const validaForm = () => {
+        const { first_name, last_name, email, password, crm, username, hospitais } = form;
 
-        console.log(first_name, last_name, crm, hospitals, username, email, password);
+        let isValid = true;
 
-        // Valida
-        let is_first_name_valid = false;
-        if (first_name === ""){
+        // Validação de first_name
+        if (!first_name) {
             setFirstNameError("Este campo é obrigatório!");
-            setFirstNameValid(!first_name_valid);
+            setFirstNameValid(false);
+            isValid = false;
         } else {
-            is_first_name_valid = true;
+            setFirstNameError("");
+            setFirstNameValid(true);
         }
 
-        // Valida sobrenome
-        let is_last_name_valid = false;
-        if (last_name === ""){
+        // Validação de last_name
+        if (!last_name) {
             setLastNameError("Este campo é obrigatório!");
+            setLastNameValid(false);
+            isValid = false;
         } else {
+            setLastNameError("");
             setLastNameValid(true);
-            is_last_name_valid = true;
         }
 
-
-        // Valida email
-        let is_email_valid = false;
-        const email_regex = /\w+@\D+[.]\D{3}/gm;
-        if (!email_regex.test(email)) {
-            setEmailError("Formato de email inválido!");
-        } else if (email === "") {
+        // Validação de email
+        const email_regex = /\w+@\D+[.]\D{2,}/gm;
+        if (!email) {
             setEmailError("Este campo é obrigatório!");
+            setEmailValid(false);
+            isValid = false;
+        } else if (!email_regex.test(email)) {
+            setEmailError("Formato de email inválido!");
+            setEmailValid(false);
+            isValid = false;
         } else {
+            setEmailError("");
             setEmailValid(true);
-            is_email_valid = true;
         }
 
-        // Valida
-        let is_password_valid = false;
-        if (password === ""){
+        // Validação de password
+        if (!password) {
             setPasswordError("Este campo é obrigatório!");
+            setPasswordValid(false);
+            isValid = false;
         } else if (password.length < 8) {
             setPasswordError("A senha precisa ter pelo menos 8 caracteres!");
+            setPasswordValid(false);
+            isValid = false;
         } else {
+            setPasswordError("");
             setPasswordValid(true);
-            is_password_valid = true;
         }
 
-        // Valida CRM
-        let is_crm_valid = false;
-        const crm_regex = /\D/gm;
-        if (crm_regex.test(crm)) {
-            setCrmError("Só números no CRM!");
-        } else if (crm === "") {
+        // Validação de CRM
+        const crm_regex = /^\d+$/;
+        if (!crm) {
             setCrmError("Este campo é obrigatório!");
+            setCrmValid(false);
+            isValid = false;
+        } else if (!crm_regex.test(crm)) {
+            setCrmError("Só números no CRM!");
+            setCrmValid(false);
+            isValid = false;
         } else {
+            setCrmError("");
             setCrmValid(true);
-            is_crm_valid = true;
         }
 
-        // Valida username
-        let is_username_valid = false;
-        if (username === "") {
+        // Validação de username
+        if (!username) {
             setUsernameError("Este campo é obrigatório!");
+            setUsernameValid(false);
+            isValid = false;
         } else {
+            setUsernameError("");
             setUsernameValid(true);
-            is_username_valid = true;
         }
 
-        // Valida
-        let is_hospitals_valid = false;
-        if (hospitals.length === 0) {
+        // Validação de hospitais
+        if (!hospitais.length) {
             setHospitaisError("Selecione um ou mais hospitais!");
+            setHospitaisValid(false);
+            isValid = false;
         } else {
+            setHospitaisError("");
             setHospitaisValid(true);
-            is_hospitals_valid = true;
         }
 
-        if (is_first_name_valid && is_last_name_valid && is_email_valid && is_password_valid
-            && is_crm_valid && is_username_valid && is_hospitals_valid
-        ) {
-            setValidated(true);
-        }
-
-        return (is_first_name_valid && is_last_name_valid && is_email_valid && is_password_valid
-            && is_crm_valid && is_username_valid && is_hospitals_valid
-        );
+        setValidated(isValid);
+        return isValid;
     }
 
 
@@ -166,7 +166,7 @@ const RegistrationForm = () => {
         const valid_form = validaForm(form);
 
 
-        if (!valid_form) {
+        if (!validaForm()) {
             console.log("Formulário inválido!")
             e.stopPropagation();
         } else {
@@ -195,11 +195,16 @@ const RegistrationForm = () => {
                     );
 
                     console.log("Registro adicionado com sucesso!");
+                    setSuccess(true);
+                    setMessage(response.data.message);
 
-                    navigate("/");
+
+                    setTimeout(() => navigate("/"), 3000);
+                    
                 }
             ).catch( (error) => {
                     if (error.message) {
+                        setSuccess(false);
                         setError(error.request.response);
                     }
                     console.log(error.message);
@@ -210,115 +215,118 @@ const RegistrationForm = () => {
     }
 
     return (
-        <Form noValidate id="register-form" onSubmit={handleSubmit} validation={validated} className="align-items-center">
-            <Form.Group className="mb-3">
-                <FloatingLabel controlId="regNome" label="Digite seu nome">
-                    <Form.Control value={form.first_name}
-                                  name="first_name"
-                                  onChange={(e) =>
-                                      setForm({ ...form, [e.target.name]: e.target.value })}
-                                  placeholder="Digite seu nome"
-                                  type="input"
-                                  required
-                                  isInvalid={!first_name_valid}
-                                  onFocus={(e) => setFirstNameValid(!first_name_valid)}
-                    />
-                    <Form.Control.Feedback type="invalid" name="feedbackFirstName">
-                        {first_name_error}
+        <>
+            { error && <p className="text-danger text-center mb-3">{message}</p> }
+            { success && <p className="text-success text-center mb-3">{message}</p> }
+            <Form noValidate id="register-form" onSubmit={handleSubmit} validation={validated} className="align-items-center">
+                <Form.Group className="mb-3">
+                    <FloatingLabel controlId="regNome" label="Digite seu nome">
+                        <Form.Control value={form.first_name}
+                                      name="first_name"
+                                      onChange={(e) =>
+                                          setForm({ ...form, [e.target.name]: e.target.value })}
+                                      placeholder="Digite seu nome"
+                                      type="input"
+                                      required
+                                      isInvalid={!first_name_valid}
+                        />
+                        <Form.Control.Feedback type="invalid" name="feedbackFirstName">
+                            {first_name_error}
+                        </Form.Control.Feedback>
+                    </FloatingLabel>
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <FloatingLabel controlId="regSobrenome" label="Digite seu sobrenome">
+                        <Form.Control value={form.last_name}
+                                      name="last_name"
+                                      onChange={(e) =>
+                                          setForm({ ...form, [e.target.name]: e.target.value })}
+                                      placeholder="Digite seu sobrenome"
+                                      type="input"
+                                      required
+                                      isInvalid={!last_name_valid}
+                        />
+                        <Form.Control.Feedback type="invalid" name="feedbackLastName">
+                            {last_name_error}
+                        </Form.Control.Feedback>
+                    </FloatingLabel>
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <FloatingLabel controlId="regEmail" label="Digite seu email">
+                        <Form.Control value={form.email}
+                                      name="email"
+                                      onChange={(e) =>
+                                          setForm({ ...form, [e.target.name]: e.target.value })}
+                                      placeholder="Digite email"
+                                      type="email"
+                                      required
+                                      isInvalid={!email_valid}
+                        />
+                        <Form.Control.Feedback type="invalid" name="feedbackEmail">
+                            {email_error}
+                        </Form.Control.Feedback>
+                    </FloatingLabel>
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <FloatingLabel controlId="regUsername" label="Digite seu nome de usuário">
+                        <Form.Control value={form.username}
+                                      name="username"
+                                      onChange={(e) =>
+                                          setForm({ ...form, [e.target.name]: e.target.value })}
+                                      placeholder="Usuário"
+                                      type="input"
+                                      required
+                                      isInvalid={!username_valid}
+                        />
+                        <Form.Control.Feedback type="invalid" name="feedbackUsername">
+                            {username_error}
+                        </Form.Control.Feedback>
+                    </FloatingLabel>
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <FloatingLabel controlId="regPassword" label="Digite sua senha">
+                        <Form.Control value={form.password}
+                                      name="password"
+                                      onChange={(e) =>
+                                          setForm({ ...form, [e.target.name]: e.target.value })}
+                                      placeholder="Senha"
+                                      type="password"
+                                      required
+                                      isInvalid={!password_valid}
+                        />
+                        <Form.Control.Feedback type="invalid" name="feedbackPassword">
+                            {password_error}
+                        </Form.Control.Feedback>
+                    </FloatingLabel>
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <FloatingLabel controlId="regCRM" label="Digite seu CRM">
+                        <Form.Control value={form.crm}
+                                      name="crm"
+                                      onChange={(e) =>
+                                          setForm({ ...form, [e.target.name]: e.target.value })}
+                                      placeholder="Digite seu CRM"
+                                      type="input"
+                                      required
+                                      isInvalid={!crm_valid}
+                        />
+                        <Form.Control.Feedback type="invalid" name="feedbackCRM">
+                            {crm_error}
+                        </Form.Control.Feedback>
+                    </FloatingLabel>
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Label>Hospitais que trabalha</Form.Label>
+                    <HospitaisSelect handleHospitals={handleHospitais} />
+                    <Form.Control.Feedback type="invalid" name="feedbackHospitals">
+                        {hospitais_error}
                     </Form.Control.Feedback>
-                </FloatingLabel>
-            </Form.Group>
-            <Form.Group className="mb-3">
-               <FloatingLabel controlId="regSobrenome" label="Digite seu sobrenome">
-                   <Form.Control value={form.last_name}
-                                 name="last_name"
-                                 onChange={(e) =>
-                                     setForm({ ...form, [e.target.name]: e.target.value })}
-                                 placeholder="Digite seu sobrenome"
-                                 type="input"
-                                 required
-                                 isInvalid={!last_name_valid}
-                   />
-                   <Form.Control.Feedback type="invalid" name="feedbackLastName">
-                       {last_name_error}
-                   </Form.Control.Feedback>
-               </FloatingLabel>
-            </Form.Group>
-            <Form.Group className="mb-3">
-                <FloatingLabel controlId="regEmail" label="Digite seu email">
-                    <Form.Control value={form.email}
-                                  name="email"
-                                  onChange={(e) =>
-                                      setForm({ ...form, [e.target.name]: e.target.value })}
-                                  placeholder="Digite email"
-                                  type="email"
-                                  required
-                                  isInvalid={!email_valid}
-                    />
-                    <Form.Control.Feedback type="invalid" name="feedbackEmail">
-                        {email_error}
-                    </Form.Control.Feedback>
-                </FloatingLabel>
-            </Form.Group>
-            <Form.Group className="mb-3">
-                <FloatingLabel controlId="regUsername" label="Digite seu nome de usuário">
-                    <Form.Control value={form.username}
-                                  name="username"
-                                  onChange={(e) =>
-                                      setForm({ ...form, [e.target.name]: e.target.value })}
-                                  placeholder="Usuário"
-                                  type="input"
-                                  required
-                                  isInvalid={!username_valid}
-                    />
-                    <Form.Control.Feedback type="invalid" name="feedbackUsername">
-                        {username_error}
-                    </Form.Control.Feedback>
-                </FloatingLabel>
-            </Form.Group>
-            <Form.Group className="mb-3">
-                <FloatingLabel controlId="regPassword" label="Digite sua senha">
-                    <Form.Control value={form.password}
-                                  name="password"
-                                  onChange={(e) =>
-                                      setForm({ ...form, [e.target.name]: e.target.value })}
-                                  placeholder="Senha"
-                                  type="password"
-                                  required
-                                  isInvalid={!password_valid}
-                    />
-                    <Form.Control.Feedback type="invalid" name="feedbackPassword">
-                        {password_error}
-                    </Form.Control.Feedback>
-                </FloatingLabel>
-            </Form.Group>
-            <Form.Group className="mb-3">
-                <FloatingLabel controlId="regCRM" label="Digite seu CRM">
-                    <Form.Control value={form.crm}
-                                  name="crm"
-                                  onChange={(e) =>
-                                      setForm({ ...form, [e.target.name]: e.target.value })}
-                                  placeholder="Digite seu CRM"
-                                  type="input"
-                                  required
-                                  isInvalid={!crm_valid}
-                    />
-                    <Form.Control.Feedback type="invalid" name="feedbackCRM">
-                        {crm_error}
-                    </Form.Control.Feedback>
-                </FloatingLabel>
-            </Form.Group>
-            <Form.Group className="mb-3">
-                <Form.Label>Hospitais que trabalha</Form.Label>
-                <HospitaisSelect handleHospitals={handleHospitais} />
-                <Form.Control.Feedback type="invalid" name="feedbackHospitals">
-                    {hospitais_error}
-                </Form.Control.Feedback>
-            </Form.Group>
-            <Form.Group className="mb-3 text-center">
-                <Button variant="primary" type="submit" onClick={handleSubmit}>Cadastrar</Button>
-            </Form.Group>
-        </Form>
+                </Form.Group>
+                <Form.Group className="mb-3 text-center">
+                    <Button variant="primary" type="submit" onClick={handleSubmit}>Cadastrar</Button>
+                </Form.Group>
+            </Form>
+        </>
   )
 }
 export default RegistrationForm

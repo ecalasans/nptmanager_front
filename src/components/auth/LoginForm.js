@@ -124,6 +124,7 @@ const LoginForm = () => {
                                   type="email"
                                   required
                                   isInvalid={!email_valid}
+                                  className="campo"
                     />
                     <Form.Control.Feedback type="invalid" name="feedbackEmail">
                         {email_error}

@@ -15,13 +15,9 @@ const Registration = () => {
                             <p>A melhor maneira de prescrever NPT!</p>
                         </div>
                     </Col>
-                    {/*<Col className="col-12">*/}
-                    {/*    <Image src={`${process.env.PUBLIC_URL}/static/img/login.svg`}*/}
-                    {/*           fluid className="img-login"></Image>*/}
-                    {/*</Col>*/}
                 </Col>
                 <Col md={6} className="order-sm-2 mt-2 register-container">
-                    <h2>Faça seu cadastro</h2>
+                    <h2 className="text-center">Faça seu cadastro</h2>
                     <RegistrationForm />
                     <div className="text-center">
                         <p className="content">Faça seu {" "}

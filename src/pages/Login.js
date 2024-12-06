@@ -4,7 +4,7 @@ import {Col, Container, Row} from "react-bootstrap";
 
 const Login = () => {
     return (
-        <Container className="col-md-9 col-11 form-container" id="form-container">
+        <Container fluid className="col-md-9 col-11 form-container" id="form-container">
             <Row className="align-items-center justify-content-center">
                 <Col md={6} className="order-sm-1">
                     <Col className="col-12 align-items-center">
