@@ -4,5 +4,12 @@
     padding: .5rem;
     align-items: flex-end;
     margin: 0
+}
 
+.fs-sidebar-small{
+    font-size: 0.7rem;
+}
+
+.link-sidebar{
+    text-decoration: none;
 }

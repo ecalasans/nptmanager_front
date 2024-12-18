@@ -3,9 +3,6 @@ import LoginForm from '../components/auth/LoginForm';
 import {Col, Container, Row} from "react-bootstrap";
 
 const Login = () => {
-    //TODO:  Capturar via State Lift o hospital selecionado do componente LoginForm
-    //TODO:  Passar o hospital selecionado para a Home
-
     return (
         <Container fluid className="col-md-9 col-11 form-container" id="form-container">
             <Row className="align-items-center justify-content-center">

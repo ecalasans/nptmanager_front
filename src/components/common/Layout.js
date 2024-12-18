@@ -10,7 +10,7 @@ const Layout = (props) => {
                 <Header></Header>
             </Row>
             <Row className="d-flex vh-100">
-                <Col sm={2} className="p-0">
+                <Col sm={2} className="p-0 h-75">
                     <Sidebar></Sidebar>
                 </Col>
                 <Col sm={10}>

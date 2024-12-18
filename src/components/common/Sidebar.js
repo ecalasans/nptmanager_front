@@ -1,8 +1,12 @@
+//TODO: Revisar layout
+
+
 import {Container, Row, Col, Navbar, Image} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import {randomAvatar} from "../../helpers/utils";
 import {useEffect, useState} from "react";
 import moment from "moment";
+import "./css/styles.css"
 
 const Sidebar = () => {
     const [user_logged, setUserLogged] = useState("");
@@ -28,26 +32,39 @@ const Sidebar = () => {
     )
 
     return (
-       <Container fluid className="flex-row align-items-center justify-content-center">
+       <Container fluid className="flex-row align-items-center justify-content-center h-100">
            <Row className="align-items-center justify-content-center w-100">
-               <Navbar.Brand className="d-flex align-items-center justify-content-center w-100">
-                   <Image src={randomAvatar()} width={36}
-                          height={36} className=""
-                          roundedCircle={true}/>
-               </Navbar.Brand>
-               <Navbar className="flex-column align-items-center justify-content-center p-0 w-100">
-                   <Navbar.Brand className="flex-column align-items-center justify-content-center m-0 w-100">
-                       <h3 className="text-center text-wrap m-0">{user_logged}</h3>
-                       <p className="mt-0 fs-6 text-wrap text-center fw-lighter">
+               <Navbar className="d-flex flex-column align-items-center justify-content-center w-100">
+                   <Navbar.Brand className="d-flex align-items-center justify-content-center w-100">
+                       <Image src={randomAvatar()} width={36}
+                              height={36} className="me-0"
+                              roundedCircle={true}/>
+                   </Navbar.Brand>
+                   <Navbar.Brand className="d-flex flex-column align-items-center justify-content-center m-0 w-100">
+                       <h5 className="text-center text-wrap m-0">{user_logged}</h5>
+                       <p className="mt-0 fs-sidebar-small text-wrap text-center fw-light">
                            {last_logged ? `Último login em ${last_logged.format("DD/MM/YYYY HH:mm:ss")} 
                                 por ${userHospSelected}` : "Data inválida!"}
                        </p>
                    </Navbar.Brand>
                </Navbar>
            </Row>
-           <Row>
-               <Col></Col>
-               <Col></Col>
+           <Row className="align-items-center justify-content-around w-100 h-50">
+               <Navbar className="d-flex flex-column align-items-center
+                    justify-content-between w-100 h-100">
+                   <Link to="#" className="link-sidebar">
+                       <h3>Pacientes</h3>
+                   </Link>
+                   <Link to="#" className="link-sidebar">
+                       <h3>Prescrições</h3>
+                   </Link>
+                   <Link to="#" className="link-sidebar">
+                       <h3>Estatísticas</h3>
+                   </Link>
+                   <Link to="#" className="link-sidebar">
+                       <h3>Relatórios</h3>
+                   </Link>
+               </Navbar>
            </Row>
        </Container>
     )
