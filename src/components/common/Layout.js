@@ -14,7 +14,7 @@ const Layout = (props) => {
                     <Sidebar></Sidebar>
                 </Col>
                 <Col sm={10}>
-                    <p>Conteúdo</p>
+                    {props.children}
                 </Col>
                 
             </Row>

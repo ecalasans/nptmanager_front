@@ -1,6 +1,3 @@
-//TODO: Revisar layout
-
-
 import {Container, Row, Col, Navbar, Image} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import {randomAvatar} from "../../helpers/utils";
@@ -34,17 +31,20 @@ const Sidebar = () => {
     return (
        <Container fluid className="flex-row align-items-center justify-content-center h-100">
            <Row className="align-items-center justify-content-center w-100">
-               <Navbar className="d-flex flex-column align-items-center justify-content-center w-100">
-                   <Navbar.Brand className="d-flex align-items-center justify-content-center w-100">
+               <Navbar className="d-flex flex-column align-items-center justify-content-center pt-0 w-100">
+                   <Navbar.Brand className="d-flex align-items-center justify-content-center  w-100">
                        <Image src={randomAvatar()} width={36}
                               height={36} className="me-0"
                               roundedCircle={true}/>
                    </Navbar.Brand>
                    <Navbar.Brand className="d-flex flex-column align-items-center justify-content-center m-0 w-100">
                        <h5 className="text-center text-wrap m-0">{user_logged}</h5>
-                       <p className="mt-0 fs-sidebar-small text-wrap text-center fw-light">
-                           {last_logged ? `Último login em ${last_logged.format("DD/MM/YYYY HH:mm:ss")} 
-                                por ${userHospSelected}` : "Data inválida!"}
+                       <p className="m-0 fs-sidebar-small text-wrap text-center fw-light">
+                           {last_logged ? `Último login em ${last_logged.format("DD/MM/YYYY HH:mm:ss")}`
+                               : "Data inválida!"}
+                       </p>
+                       <p className="mt-0 fs-sidebar-small text-center fw-light">Você está em
+                           <span className="fw-bold"> {userHospSelected}</span>
                        </p>
                    </Navbar.Brand>
                </Navbar>
